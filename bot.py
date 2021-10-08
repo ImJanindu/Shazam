@@ -17,6 +17,9 @@ import os
 import logging
 import ffmpeg
 from ShazamAPI import Shazam
+import socket
+from asyncio import get_running_loop
+from functools import partial
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from vars import API_ID, API_HASH, BOT_TOKEN
@@ -27,6 +30,26 @@ bot = Client(
     api_hash=API_HASH,
     bot_token=BOT_TOKEN
 )
+
+def _netcat(host, port, content):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((host, port))
+    s.sendall(content.encode())
+    s.shutdown(socket.SHUT_WR)
+    while True:
+        data = s.recv(4096).decode("utf-8").strip("\n\x00")
+        if not data:
+            break
+        return data
+    s.close()
+
+
+async def paste(content):
+    loop = get_running_loop()
+    link = await loop.run_in_executor(
+        None, partial(_netcat, "ezup.dev", 9999, content)
+    )
+    return link
 
 @bot.on_message(filters.private & filters.command("shazam"))
 async def shazam(_, message):
@@ -39,7 +62,8 @@ async def shazam(_, message):
     mp3_file_content_to_recognize = open(a, 'rb').read()
     shazam = Shazam(mp3_file_content_to_recognize)
     recognize_generator = shazam.recognizeSong()
-    await message.reply_text(next(recognize_generator))
+    text = await paste(next(recognize_generator))
+    await message.reply(text)
     os.remove(a)
 
 
