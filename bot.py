@@ -36,7 +36,7 @@ bot = Client(
 
 @bot.on_message(filters.private & filters.command("start"))
 async def start(_, message):
-    await message.reply_text(""**Heya! I am Shazam Bot ✨\n\nJust send me any music file to Shazam it 🙃**)
+    await message.reply_text("**Heya! I am Shazam Bot ✨\n\nJust send me any music file to Shazam it 🙃**")
 
 
 @bot.on_message(filters.private & filters.audio)
