@@ -46,9 +46,33 @@ async def shazam(_, message):
     recognize_generator = shazam.recognizeSong()
     output = next(recognize_generator)
     cj = json.dumps(output)
-    hn = json.loads(cj)
-    text = hn["track"]["title"]
-    await message.reply_text(text)
+    
+    import requests # see https://2.python-requests.org/en/master/
+
+    key = 'XBH4IgeIY2D40O6RAjn4r8vMav7xy6IN'
+    text = cj
+    t_title = "Shazam"
+
+    login_data = {
+       'api_dev_key': key,
+       'api_user_name': 'JasonYako',
+       'api_user_password': 'Lel@takataka9'
+        }
+    data = {
+       'api_option': 'paste',
+       'api_dev_key':key,
+       'api_paste_code':text,
+       'api_paste_name':t_title,
+       'api_paste_expire_date': 'N',
+       'api_user_key': None,
+       'api_paste_format': None,
+        }
+
+    login = requests.post("https://pastebin.com/api/api_login.php", data=login_data)
+
+    r = requests.post("https://pastebin.com/api/api_post.php", data=data)
+
+    await message.reply_text(r.text)
     os.remove(a)
 
         
