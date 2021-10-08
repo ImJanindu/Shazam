@@ -1,6 +1,7 @@
 from asyncio import gather
+from aiohttp import ClientSession
 
-from bot import aiohttpsession as session
+session = ClientSession()
 
 
 async def get(url: str, *args, **kwargs):
