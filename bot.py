@@ -21,7 +21,6 @@ import logging
 import ffmpeg
 import asyncio
 from ShazamAPI import Shazam
-from http import post
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from vars import API_ID, API_HASH, BOT_TOKEN
@@ -32,14 +31,6 @@ bot = Client(
     api_hash=API_HASH,
     bot_token=BOT_TOKEN
 )
-
-BASE = "https://batbin.me/"
-
-async def paste(content: str):
-    resp = await post(f"{BASE}api/paste", data={"content": content})
-    if not resp["status"]:
-        return
-    return BASE + resp["message"]
 
 @bot.on_message(filters.private & filters.command("shazam"))
 async def shazam(_, message):
