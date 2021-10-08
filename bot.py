@@ -46,10 +46,9 @@ async def shazam(_, message):
     recognize_generator = shazam.recognizeSong()
     output = next(recognize_generator)
     cj = json.dumps(output)
-    """hn = json.loads(cj)
-    text = hn["title"]
-    await message.reply_text(text)"""
-    print(cj)
+    hn = json.loads(cj)
+    text = hn.track.["title"]
+    await message.reply_text(text)
     os.remove(a)
 
         
