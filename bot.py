@@ -33,7 +33,7 @@ async def shazam(_, message):
        return
     if not message.reply_to_message.audio:
        return
-    a = message.reply_to_message.download()
+    a = await message.reply_to_message.download()
     
     mp3_file_content_to_recognize = open(a, 'rb').read()
     shazam = Shazam(mp3_file_content_to_recognize)
