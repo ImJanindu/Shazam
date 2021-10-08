@@ -22,7 +22,6 @@ import ffmpeg
 import asyncio
 from ShazamAPI import Shazam
 from http import post
-from aiohttp import ClientSession
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from vars import API_ID, API_HASH, BOT_TOKEN
@@ -33,10 +32,6 @@ bot = Client(
     api_hash=API_HASH,
     bot_token=BOT_TOKEN
 )
-
-BASE = "https://batbin.me/"
-
-aiohttpsession = ClientSession()
 
 async def paste(content: str):
     resp = await post(f"{BASE}api/paste", data={"content": content})
