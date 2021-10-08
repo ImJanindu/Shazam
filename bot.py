@@ -40,7 +40,7 @@ async def shazam(_, message):
     recognize_generator = shazam.recognizeSong()
     while True:
 	await message.reply_text(next(recognize_generator))
-	os.remove(a)
+    os.remove(a)
 
 
         
