@@ -33,6 +33,8 @@ bot = Client(
     bot_token=BOT_TOKEN
 )
 
+BASE = "https://batbin.me/"
+
 async def paste(content: str):
     resp = await post(f"{BASE}api/paste", data={"content": content})
     if not resp["status"]:
