@@ -43,8 +43,8 @@ async def shazam(_, message):
     mp3_file_content_to_recognize = open(a, 'rb').read()
     shazam = Shazam(mp3_file_content_to_recognize)
     recognize_generator = shazam.recognizeSong()
-    output = next(recognize_generator)
-    text = output.title
+    output = recognize_generator
+    text = output
     await message.reply_text(text)
     os.remove(a)
 
