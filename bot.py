@@ -34,14 +34,17 @@ bot = Client(
     bot_token=BOT_TOKEN
 )
 
-@bot.on_message(filters.private & filters.command("shazam"))
+@bot.on_message(filters.private & filters.command("start"))
+async def start(_, message):
+    await message.reply_text(""**Heya! I am Shazam Bot ✨\n\nJust send me any music file to Shazam it 🙃**)
+
+
+@bot.on_message(filters.private & filters.audio)
 async def shazam(_, message):
-    if not message.reply_to_message:
-       return
-    if not message.reply_to_message.audio:
-       return
+    user_id = message.from_user.id
+    DL = "./{user_id}"
     m = await message.reply_text("**Shazam Processing**")
-    a = await message.reply_to_message.download()
+    a = await bot.download_media(message, DL)
     try:
        mp3_file_content_to_recognize = open(a, 'rb').read()
        shazam = Shazam(mp3_file_content_to_recognize)
