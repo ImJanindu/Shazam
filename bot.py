@@ -19,10 +19,10 @@
 import os
 import logging
 import ffmpeg
+import asyncio
 from ShazamAPI import Shazam
-import socket
-from asyncio import get_running_loop
-from functools import partial
+from http import post
+from aiohttp import ClientSession
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from vars import API_ID, API_HASH, BOT_TOKEN
@@ -34,25 +34,15 @@ bot = Client(
     bot_token=BOT_TOKEN
 )
 
-def _netcat(host, port, content):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((host, port))
-    s.sendall(content.encode())
-    s.shutdown(socket.SHUT_WR)
-    while True:
-        data = s.recv(4096).decode("utf-8").strip("\n\x00")
-        if not data:
-            break
-        return data
-    s.close()
+BASE = "https://batbin.me/"
 
+aiohttpsession = ClientSession()
 
-async def paste(content):
-    loop = get_running_loop()
-    link = await loop.run_in_executor(
-        None, partial(_netcat, "ezup.dev", 9999, content)
-    )
-    return link
+async def paste(content: str):
+    resp = await post(f"{BASE}api/paste", data={"content": content})
+    if not resp["status"]:
+        return
+    return BASE + resp["message"]
 
 @bot.on_message(filters.private & filters.command("shazam"))
 async def shazam(_, message):
@@ -68,7 +58,6 @@ async def shazam(_, message):
     text = await paste(next(recognize_generator))
     await message.reply(text)
     os.remove(a)
-
 
         
 bot.start()
