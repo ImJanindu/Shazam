@@ -20,6 +20,7 @@ import os
 import logging
 import ffmpeg
 import asyncio
+import json
 from ShazamAPI import Shazam
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -43,8 +44,9 @@ async def shazam(_, message):
     mp3_file_content_to_recognize = open(a, 'rb').read()
     shazam = Shazam(mp3_file_content_to_recognize)
     recognize_generator = shazam.recognizeSong()
-    output = recognize_generator
-    text = output
+    output = next(recognize_generator)
+    hn = json.loads(output)
+    text = hn["title"]
     await message.reply_text(text)
     os.remove(a)
 
