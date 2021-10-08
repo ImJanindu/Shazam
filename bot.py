@@ -78,7 +78,7 @@ async def shazam(_, message):
     r = requests.post("https://pastebin.com/api/api_post.php", data=data)
 
     txt = "**Shazam Done ✨**\n\n"
-    txt = txt + r.text
+    txt = txt + r.text + "\n\n**Bot By @Infinity_Bots**"
     await m.edit(txt, disable_web_page_preview=True)
     os.remove(a)
 
