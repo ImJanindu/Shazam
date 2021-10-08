@@ -15,6 +15,7 @@
 
 import os
 import logging
+import ffmpeg
 from ShazamAPI import Shazam
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
