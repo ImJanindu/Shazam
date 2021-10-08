@@ -21,6 +21,7 @@ import logging
 import ffmpeg
 import asyncio
 import json
+import requests
 from ShazamAPI import Shazam
 from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
