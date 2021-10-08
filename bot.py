@@ -40,19 +40,20 @@ async def shazam(_, message):
        return
     if not message.reply_to_message.audio:
        return
+    m = await message.reply_text("**Shazam Processing**")
     a = await message.reply_to_message.download()
-    
-    mp3_file_content_to_recognize = open(a, 'rb').read()
-    shazam = Shazam(mp3_file_content_to_recognize)
-    recognize_generator = shazam.recognizeSong()
-    output = next(recognize_generator)
-    cj = json.dumps(output)
-    
-    import requests # see https://2.python-requests.org/en/master/
+    try:
+       mp3_file_content_to_recognize = open(a, 'rb').read()
+       shazam = Shazam(mp3_file_content_to_recognize)
+       recognize_generator = shazam.recognizeSong()
+       output = next(recognize_generator)
+       cj = json.dumps(output)
+    except:
+       return await m.edit("**Error**")
 
     key = 'XBH4IgeIY2D40O6RAjn4r8vMav7xy6IN'
     text = cj
-    t_title = "Shazam"
+    t_title = "Shazam By JE"
 
     login_data = {
        'api_dev_key': key,
@@ -73,7 +74,9 @@ async def shazam(_, message):
 
     r = requests.post("https://pastebin.com/api/api_post.php", data=data)
 
-    await message.reply_text(r.text)
+    txt = "**Shazam Done ✨**\n\n"
+    txt = txt + r.text
+    await m.edit(txt, disable_web_page_preview=True)
     os.remove(a)
 
         
